@@ -19,9 +19,9 @@
 
     <div class="jumbotron">
       <h1 class="text-center">
-        <span class="fa fa-fire"></span> Hot Restaurant</h1>
+        <span class="fa fa-heart"></span> Compatability Match</h1>
       <hr>
-      <h2 class="text-center">Make your reservation</h2>
+      <h2 class="text-center">Let us know what you find HOT</h2>
       <br>
       <div class="text-center">
         <a href="/home">
@@ -37,10 +37,9 @@
     </div>
     <div class="row">
       <div class="col-lg-12">
-        <!-- Reservation Page -->
         <div class="card">
           <div class="card-header">
-            Table Reservation
+            Compatability Form
           </div>
           <div class="card-body">
             <form role="form">
@@ -97,17 +96,12 @@
 
 </html>
 
-<!-- BELOW CODE IS CRITICAL. IT HANDLES HOW FORM DATA IS SENT TO OUR SERVER -->
 <script type="text/javascript">
-  // In this code below we create the Front-end JavaScript which "POSTS" our form data to our express server.
-  // In essence, when the user hits submit, jQuery grabs all of the fields then sends a post request to our api
-  // Our api recognizes the route (/api/tables)... and then runs the associated code (found in api-routes.js).
-  // In this case the associated code "saves" the data to the table-data.js file or waitinglist-data.js file
+
 
   $(".submit").on("click", function(event) {
     event.preventDefault();
 
-    // Here we grab the form elements
     var newSuitor = {
       SuitorName: $("#suitor-name").val().trim(),
       SuitorQ1: $("#question-1").val().trim(),
@@ -119,22 +113,17 @@
 
     console.log(newSuitor);
 
-    // This line is the magic. It"s very similar to the standard ajax function we used.
-    // Essentially we give it a URL, we give it the object we want to send, then we have a "callback".
-    // The callback is the response of the server. In our case, we set up code in api-routes that "returns" true or false
-    // depending on if a tables is available or not.
 
     $.post("/api/home", newSuitor,
       function(data) {
 
-        // If a table is available... tell user they are booked.
         if (data) {
-          alert("Yay! You are officially booked!");
+          alert("Yay! You are officially in the system! We'll let you know if someone Vintastic approaches.");
         }
 
         // If a table is available... tell user they on the waiting list.
         else {
-          alert("Sorry you are on the wait list");
+          alert("Sorry you'ze a bum");
         }
 
         // Clear the form when submitting
