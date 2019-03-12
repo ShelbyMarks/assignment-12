@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Tables Page</title>
+
+  <!-- Latest compiled and minified CSS & JS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://code.jquery.com/jquery.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="jumbotron">
+      <h1 class="text-center"><span class="fa fa-heart"></span> Compatability Match</h1>
+      <hr>
+      <h2 class="text-center">Current Dating Pool</h2>
+      <br>
+
+      <div class="text-center">
+        <a href="/survey"><button class="btn btn-lg btn-danger"><span class="fa fa-credit-card"></span> Make Reservation</button></a>
+        <a href="/"><button class="btn btn-lg btn-default"><span class="fa fa-home"></span></button></a>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-12">
+
+        <!-- Current Tables in Use -->
+        <div class="card">
+          <div class="card-header">
+            <h4>Date Pool</h4>
+          </div>
+          <div class="card-body">
+            <ul id="tableList" class="list-group"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <footer class="footer mt-4">
+      <div class="container">
+        <p>Control Panel</p>
+        <p><a href="#" id="clear">Clear pool</a> | <a href="/api/home">API Table Link</a>
+            <!-- Wait List</a> -->
+      </div>
+    </footer>
+
+  </div>
+
+</body>
+
+
+<!-- BELOW CODE IS CRITICAL. IT HANDLES HOW FORM DATA IS LOADED FROM OUR SERVER -->
+<script type="text/javascript">
+
+  // In this code, jQuery is used to "download" the data from our server
+  // We then dynamically display this content in our table. This is very similar to the group projects you just completed.
+  // It's also very similar to the NYT search application. In fact, I copied a ton of code from there.
+
+  function runTableQuery() {
+    // The AJAX function uses the URL of our API to GET the data associated with it (initially set to localhost)
+    $.ajax({ url: "/api/home", method: "GET" })
+      .then(function(tableData) {
+
+        // Here we then log the tableData to console, where it will show up as an object.
+        console.log(tableData);
+        console.log("------------------------------------");
+
+        // Loop through and display each of the customers
+        for (var i = 0; i < tableData.length; i++) {
+
+          // Get a reference to the tableList element and populate it with tables
+          var tableList = $("#tableList");
+
+          // Then display the fields in the HTML (Section Name, Date, URL)
+          var listItem = $("<li class='list-group-item mt-4'>");
+
+          listItem.append(
+            $("<h2>").text("Date #" + (i + 1)),
+            $("<hr>").text("ID: " + tableData[i].SuitorID),
+            $("<h2>").text("Name: " + tableData[i].SuitorName),
+            $("<h2>").text("Do you eat with your mouth open? " + tableData[i].SuitorQ1),
+            $("<h2>").text("Is your love for Vin Diesel above average? " + tableData[i].SuitorQ2),
+            $("<h2>").text("How annoyed are you with screeching? " + tableData[i].SuitorQ3),
+            $("<h2>").text("Dream number of cats? " + tableData[i].SuitorQ4),
+            $("<h2>").text("How much do you like the smell of your own farts? " + tableData[i].SuitorQ5)
+          );
+
+          tableList.append(listItem);
+        }
+      });
+  }
+
+  // This function resets all of the data in our tables. This is intended to let you restart a demo.
+  function clearTable() {
+    alert("Clearing...");
+
+    // Clear the tables on the server and then empty the elements on the client
+    $.ajax({ url: "/api/clear", method: "POST" }).then(function() {
+      $("#waitList").empty();
+      $("#tableList").empty();
+    });
+  }
+
+  $("#clear").on("click", clearTable);
+
+
+  // Run Queries!
+  // ==========================================
+  runTableQuery();
+
+
+</script>
+
+</html>
